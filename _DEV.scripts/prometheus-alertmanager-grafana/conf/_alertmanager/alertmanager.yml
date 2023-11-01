@@ -1,0 +1,21 @@
+templates:
+  - '/etc/alertmanager/template/*.tmpl'
+
+route:
+  receiver: 'jira-data'
+  group_by:
+    - alertname
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 4h
+  routes:
+    - receiver: 'jira-data'
+      matchers:
+        - alertgroup=~"BI"
+
+receivers:
+  - name: 'jira-data'
+    webhook_configs:
+      # - url: 'http://localhost:9097/alert'
+      - url: 'https://webhook.site/af1e1001-3d44-4c6f-bfd0-1ae34bdcd2bb'
+        send_resolved: true

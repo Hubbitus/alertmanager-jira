@@ -1,0 +1,75 @@
+groups:
+
+- name: Bi
+
+  rules:
+
+    - alert: ClickhouseTableRowsAlert
+      expr: 'floor(sum_over_time(clickhouse_table_rows{code="GID.DM.CH"}[1h]) / count_over_time(clickhouse_table_rows{code="GID.DM.CH"}[1h])) - floor(sum_over_time(clickhouse_table_rows{code="GID.DM.CH"}[2h]) / count_over_time(clickhouse_table_rows{code="GID.DM.CH"}[2h])) <= 0'
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        summary: Alarm (table_name {{ $labels.table }})
+        description: |
+          No new rows of table {{ $labels.table }} for 1 hour.
+          Description https://confluence.gid.team/pages/viewpage.action?pageId=40189929
+
+    - alert: VisiologyAccessroleStatusAlert
+      expr: 'visiology_accessrole_status == 1'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: Alarm (accessrole {{ $labels.role_name }})
+        description: |
+          A company filter of the role {{ $labels.role_name }} does not match the base pattern or unexists
+          Check in visiology-app https://bi.gid.ru/admin/#/index/viqube-settings
+          Description https://confluence.gid.team/pages/viewpage.action?pageId=48803423
+
+    - alert: VisiologyAccessroleErrorAlert
+      expr: 'visiology_accessrole_error == 1'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: Alarm accessrole check has Error
+        description: |
+          An error occurred while checking company filters.
+          Check logs of visiology-exporter service
+          Description https://confluence.gid.team/pages/viewpage.action?pageId=48803423
+
+    - alert: VisiologyDatabaseStatusAlert
+      expr: 'visiology_database_status == 1'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: Alarm visiology database status
+        description: |
+          An error occurred while checking loadplans status.
+          Check in visiology-app https://bi.gid.ru/admin/#/index/viqube-settings
+          Description https://confluence.gid.team/pages/viewpage.action?pageId=48803421
+
+    - alert: VisiologyLoadplanStatusAlert
+      expr: 'visiology_loadplan_status == 1'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: Alarm (loadplan {{ $labels.loadplan_name }})
+        description: |
+          The loadplan {{ $labels.loadplan_name }} has errors.
+          Check in visiology-app https://bi.gid.ru/admin/#/index/viqube-settings
+          Description https://confluence.gid.team/pages/viewpage.action?pageId=48803421
+
+    - alert: ClickhouseEventRowsAlert
+      expr: 'clickhouse_event_rows{code="GID.DM.CH"} == 0'
+      for: 2d
+      labels:
+        severity: warning
+      annotations:
+        summary: Alarm (event_name {{ $labels.event }})
+        description: |
+          No events {{ $labels.event }} for 2 days.
+          Description https://confluence.gid.team/pages/viewpage.action?pageId=48803504

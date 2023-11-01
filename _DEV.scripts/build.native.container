@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+cd ..
+time ./gradlew imageBuild -Dquarkus.package.type=native

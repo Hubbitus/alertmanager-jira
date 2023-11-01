@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+
+set -xe
+
+http http://localhost:8080/ping
+
+exit
+
+curl -v --header "Content-Type: application/json" \
+    http://localhost:8080/config
+
+exit
+
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"year":1995, "title":"The Shawshank Redemption"}' \
+    http://localhost:8080/
+
+
+#     http://localhost:8080/movie
