@@ -1,0 +1,20 @@
+quarkus:
+  http:
+    enable-compression: true
+    test-port: 8082
+  container-image:
+    image: local/alertmanager-jira
+  native:
+    resources:
+      includes: '*.json'
+  log:
+    category:
+      "info.hubbitus":
+        level: DEBUG
+
+jira:
+  URL: https://jira-lab.gid.team/
+#  URL: https://jira-new.gid.team/
+  username: plalexeev
+  # Must be provided securely, f.e. by env variable JIRA_PASSWORD
+#  password:

@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+podman-compose down -v
+podman-compose up -d
+
+podman-compose logs -f

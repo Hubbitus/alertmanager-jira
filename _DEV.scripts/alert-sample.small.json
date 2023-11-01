@@ -1,0 +1,51 @@
+{
+  "receiver": "jira-data",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "DataTest0",
+        "code": "200",
+        "instance": "localhost:9090",
+        "jira__assignee": "plalexeev",
+        "jira__severity": "High",
+        "job": "prometheus",
+        "qaz1": "qwerty some",
+        "severity": "warning",
+        "value": "8"
+      },
+      "annotations": {
+        "description": "Some description QAZ2\nof DataTest0 alert\n",
+        "qaz": "qwerty",
+        "summary": "DataTest0 summary"
+      },
+      "startsAt": "2023-10-10T21:44:29.64Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://e19d63b25b55:9090/graph?g0.expr=promhttp_metric_handler_requests_total+%3E+1\u0026g0.tab=1",
+      "fingerprint": "84496749f34c5369"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "DataTest0"
+  },
+  "commonLabels": {
+    "alertname": "DataTest0",
+    "code": "200",
+    "instance": "localhost:9090",
+    "jira__assignee": "plalexeev",
+    "jira__severity": "High",
+    "job": "prometheus",
+    "qaz1": "qwerty some",
+    "severity": "warning"
+  },
+  "commonAnnotations": {
+    "description": "Some description QAZ2\nof DataTest0 alert\n",
+    "qaz": "qwerty",
+    "summary": "DataTest0 summary"
+  },
+  "externalURL": "http://56d02fa4d1bc:9093",
+  "version": "4",
+  "groupKey": "{}:{alertname=\"DataTest0\"}",
+  "truncatedAlerts": 0
+}

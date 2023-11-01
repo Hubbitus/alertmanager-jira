@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+set -xe
+
+http http://localhost:8080/ping
