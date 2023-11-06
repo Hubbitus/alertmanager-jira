@@ -126,8 +126,4 @@ class JiraServiceTest {
 	private String contentResourceFile(String name) throws IOException {
 		return this.getClass().getResource(name).text
 	}
-
-	static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(Collection<T> items) {
-		return IsIterableContainingInAnyOrder.<T>containsInAnyOrder((T[]) items.toArray());
-	}
 }
