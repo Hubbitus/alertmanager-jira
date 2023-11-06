@@ -1,48 +1,32 @@
 package info.hubbitus.DTO
 
+import com.fasterxml.jackson.annotation.JsonBackReference
+import groovy.transform.AutoClone
+import groovy.transform.Canonical
 import groovy.transform.ToString
+
 import java.time.ZonedDateTime
 
-/**
- * See example of alert in _DEV.scripts/alert-sample.json
- */
+@Canonical
+@AutoClone
 @ToString(includeNames = true)
 class Alert {
-	String receiver
+	@JsonBackReference
+	public AlertRequest alertRequestParent
+
 	String status
 
-	Set<AlertItem> alerts
-	Labels groupLabels
-	Labels commonLabels
+	AlertRequest.Labels labels
+	AlertRequest.Annotations annotations
 
-	int truncatedAlerts
-
-	String groupKey
-	String version
-	String externalURL
-	Annotations commonAnnotations
-
-	static class AlertItem {
-		String status
-
-		Labels labels
-		Annotations annotations
-
-		String fingerprint
-		String generatorURL
-		ZonedDateTime endsAt
-		ZonedDateTime startsAt
-	}
+	String fingerprint
+	String generatorURL
+	ZonedDateTime endsAt
+	ZonedDateTime startsAt
 
 	/**
-	 * There are "well known" items "alertname", "code", "severity", and others (variable amount) by user.
+	 * Just fast access to do not check always in labels and annotations.
 	 */
-	static class Labels extends LinkedHashMap<String, String>{
-	}
-
-	/**
-	 * There are will be at least items "summary", "description", and others (variable amount) by user.
-	 */
-	static class Annotations extends LinkedHashMap<String, String> {
-	}
+	@Lazy
+	Map params = {labels + annotations}()
 }

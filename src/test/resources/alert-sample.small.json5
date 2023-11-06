@@ -1,0 +1,59 @@
+{
+  "receiver": "jira-data",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "DataTest0",
+        "code": "200",
+        "global_label_1": "2",
+        "instance": "localhost:9090",
+        "jira__field__priority": "High",
+        "jira__issue_type_name": "Alert",
+        "jira__project_key": "DATA",
+        "job": "prometheus",
+        "qaz1_label": "qaz1_label_value",
+        "qaz2_label": "qaz2_label_value",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Some description QAZ2\nof DataTest0 alert\nVALUE: 3\n",
+        "jira__field__assignee": "plalexeev",
+        "jira__field__component_s": "DQ-support, DevOps-infrastructure",
+        "jira__field__labels": "label_one, labelTwo, label:three",
+        "jira__issue_type_name": "Alert",
+        "jira__project_key": "DATA",
+        "qaz1_annotation": "qaz1_annotation_value",
+        "summary": "DataTest0 summary",
+        "value": "3"
+      },
+      "startsAt": "2023-11-05T23:05:29.64Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://89cffcee4bdb:9090/graph?g0.expr=promhttp_metric_handler_requests_total+%3E+1&g0.tab=1",
+      "fingerprint": "97584ea0f197fa9a"
+    }
+  ],
+  "groupLabels": {
+    "instance": "localhost:9090"
+  },
+  "commonLabels": {
+    "code": "200",
+    "instance": "localhost:9090",
+    "jira__field__priority": "High",
+    "jira__issue_type_name": "Alert",
+    "jira__project_key": "DATA",
+    "job": "prometheus",
+    "qaz1_label": "qaz1_label_value",
+    "severity": "warning"
+  },
+  "commonAnnotations": {
+    "jira__field__assignee": "plalexeev",
+    "qaz1_annotation": "qaz1_annotation_value"
+  },
+  "externalURL": "http://f856ff453070:9093",
+  "version": "4",
+  "groupKey": "{}:{instance=\"localhost:9090\"}",
+  "truncatedAlerts": 0
+}
+
