@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import groovy.transform.AutoClone
 import groovy.transform.Canonical
 import groovy.transform.ToString
-import java.time.ZonedDateTime
 
 /**
  * See example of alert in _DEV.scripts/alert-sample.json

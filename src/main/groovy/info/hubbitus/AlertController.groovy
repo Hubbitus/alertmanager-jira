@@ -39,10 +39,10 @@ class AlertController {
 
         List<BasicIssue> issues = jira.process(alertRequest)
 
-        return Response.accepted().entity(
+        return Response.ok().entity(
             new JsonBuilder([
                 result: 'ok',
-                created_issues: issues.collectEntries{it.key}
+                created_issues: issues*.key
             ])
         ).build()
     }
