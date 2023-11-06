@@ -7,7 +7,7 @@ Just simple as:
 ./up
 ```
 
-## Entrypoints
+## Entry points
 
 * Grafana: http://localhost:3000/
 * Prometheus:

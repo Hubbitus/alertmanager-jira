@@ -7,15 +7,30 @@ groups:
       # 1. https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
       # 2. https://prometheus.io/docs/practices/rules/#recording-rules
       expr: 'promhttp_metric_handler_requests_total > 1'
-#      for: 10s
+      for: 10s
       labels:
         severity: warning
-        qaz1: qwerty some
-        jira__severity: High
-        jira__assignee: plalexeev
-        value: '{{$value}}'
+        qaz1_label: qaz1_label_value
+        qaz2_label: qaz2_label_value
+        jira__field__priority: High
+        # Please note: `$value` and `for` may lead to alert will always in pending state!
+        # See https://groups.google.com/g/prometheus-users/c/7Ul6ngc7Ogs/m/j_YDszV5BwAJ
+        # So, probably that should be placed into annotations!
+#        value: '{{$value}}'
+        # Example of overwrite global labels set in prometheus's `external_labels` config:
+        global_label_1: 2
       annotations:
-        qwerty: qaz
+        jira__project_key: DATA
+        jira__issue_type_name: Alert
+        jira__field__assignee: plalexeev
+        jira__field__component_s: 'DQ-support, DevOps-infrastructure'
+        jira__field__labels: 'label_one, labelTwo, label:three'
+        jira__field__name__1: 'Итоговый результат'
+        jira__field__value__1: 'Some result description (описание результата)'
+        # Field 'Target start'
+        jira__field__target_start: '2023-11-06'
+        qaz1_annotation: qaz1_annotation_value
+        value: '{{$value}}'
         summary: DataTest0 summary
         description: |
           Some description QAZ2
@@ -24,15 +39,18 @@ groups:
 
     - alert: DataTest1
       expr: 'promhttp_metric_handler_requests_total > 1'
-#      for: 10s
+      for: 10s
       labels:
         severity: warning
-        qaz1: qwerty some
-        jira__severity: High
-        jira__assignee: plalexeev
+        qaz1_label: qaz1_label_value
+        jira__field__priority: High
       annotations:
         summary: DataTest1 summary
+        jira__field__assignee: plalexeev
+        qaz1_annotation: qaz1_annotation_value
+        qaz2_annotation: qaz2_annotation_value
+        # Field "Итоговый результат"
+        jira__field__customId__10217: 'Some result description (описание результата)'
         description: |
           Some description QAZ2
           of DataTest1 alert
-        qaz: qwerty1

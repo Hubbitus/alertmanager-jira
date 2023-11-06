@@ -1,8 +1,8 @@
 package info.hubbitus
 
-import com.atlassian.jira.rest.client.api.domain.SearchResult
+import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import groovy.json.JsonBuilder
-import info.hubbitus.DTO.Alert
+import info.hubbitus.DTO.AlertRequest
 import jakarta.inject.Inject
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.Response
@@ -34,20 +34,16 @@ class AlertController {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @SuppressWarnings('UnnecessaryPublicModifier') // That is controller, public required
-    public Response alert(Alert alert) {
-        log.debug('Got alert: ' + alert)
-        log.debug("Jira service: ${jira}")
-        log.debug("Jira service: ${jira.jiraRestClient}")
-//        IssueRestClient issueClient = jira.jiraRestClient.getIssueClient()
-//        jira.jiraRestClient.getSearchClient()
-//        Promise<Issue> promise =  issueClient.getIssue('DATA-1')
-//        Issue issue = promise.claim()
+    public Response alert(AlertRequest alertRequest) {
+        log.debug('Got alertRequest: ' + alertRequest)
 
-        def searchClient = jira.jiraRestClient.getSearchClient()
-        SearchResult res = searchClient.searchJql('project = DATA AND labels = perfomance').claim()
+        List<BasicIssue> issues = jira.process(alertRequest)
 
-        return Response.ok().entity(
-            new JsonBuilder([result: 'ok'])
+        return Response.accepted().entity(
+            new JsonBuilder([
+                result: 'ok',
+                created_issues: issues.collectEntries{it.key}
+            ])
         ).build()
     }
 }

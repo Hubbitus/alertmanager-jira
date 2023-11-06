@@ -19,12 +19,14 @@ repositories {
         implementation 'io.quarkus:quarkus-config-yaml'
 
         /**
-         * Unfortunately Spock is not supported yet, so use JUnit5.
-         * @link https://github.com/quarkusio/quarkus/issues/6506
-         * @link https://github.com/quarkusio/quarkus/issues/30221
-         */
+        * Unfortunately Spock is not supported yet, so use JUnit5.
+        * @link <a href="https://github.com/quarkusio/quarkus/issues/6506">Quarkus issue for that</a>
+        * @link <a href="https://github.com/quarkusio/quarkus/issues/30221">Quarkus spock extension proposal</a>
+        **/
         testImplementation 'io.quarkus:quarkus-junit5'
         testImplementation 'io.rest-assured:rest-assured:5.3.2'
+        testImplementation 'org.mockito:mockito-core:5.7.0'
+
 
         implementation 'io.quarkiverse.groovy:quarkus-groovy:3.4.0'
         implementation 'org.apache.groovy:groovy-json:4.0.15'

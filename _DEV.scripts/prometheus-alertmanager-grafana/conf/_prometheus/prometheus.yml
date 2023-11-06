@@ -1,7 +1,12 @@
-
 global:
   scrape_interval:     15s
   evaluation_interval: 15s
+
+  #  alerting:
+  #    alert_relabel_configs:
+
+  external_labels:
+    global_label_1: 1
 
 rule_files:
   - 'alerts/bi.yml'
@@ -13,6 +18,11 @@ scrape_configs:
       - targets: ['localhost:9090']
 
 alerting:
+  alert_relabel_configs:
+    - target_label: jira__project_key
+      replacement: DATA
+    - target_label: jira__issue_type_name
+      replacement: Alert
   alertmanagers:
     - scheme: http
       static_configs:
