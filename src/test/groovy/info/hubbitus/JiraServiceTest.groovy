@@ -62,7 +62,7 @@ class JiraServiceTest {
 				jiraService: jiraService
 			)
 			alertContexts.add(alerting) // To check parsing
-			jiraService.createIssueInput(alerting) // TODO also updates
+			jiraService.createIssueInput(alerting)
 		}
 
 		assertThat(issuesToCreate, notNullValue())
