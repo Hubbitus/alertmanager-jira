@@ -6,7 +6,7 @@ package info.hubbitus
 * Please note, for values takes array, please provide it as comma-separated string (), like: `jira__field__labels: 'label_one, labelTwo, label:three'`
 * `jira__field__name__<n>`/`jira__field__value__<n>` pairs. See notes below about possible variants of quoting and names providing
 **/
-public enum OptionsFields {
+enum OptionsFields {
 	JIRA__PROJECT_KEY('jira__project_key', 'The project name in which issue creation is supposed to be (e.g. `DATA`)', null),
 	JIRA__ISSUE_TYPE_NAME('jira__issue_type_name', 'The type of issue (e.g. `Task`)', null),
 	JIRA__ALERT_IDENTIFY_LABEL('jira__alert_identify_label', 'Template of additional label to identify issue update (or resolving). By default, `alert[${context.alert.hashCode()}]', 'alert[${context.alert.hashCode()}]'),
