@@ -149,8 +149,8 @@ class JiraService {
 
 			@Override
 			ComplexIssueInputFieldValue apply(T value) {
-				return ComplexIssueInputFieldValue.with(key, value);
+				return ComplexIssueInputFieldValue.with(key, value)
 			}
-		});
+		})
 	}
 }
