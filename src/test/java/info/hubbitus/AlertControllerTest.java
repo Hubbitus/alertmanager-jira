@@ -36,7 +36,7 @@ class AlertControllerTest {
 			.when()
 				.post("/alert")
 			.then()
-				.statusCode(202);
+				.statusCode(200);
 	}
 
 	/* *********************

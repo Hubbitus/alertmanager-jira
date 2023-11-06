@@ -64,6 +64,9 @@ The most important which must be set for rule:
 * `jira__field__*` - all fields which we are best trying to set in target issue. For examples: `jira__field__assignee: plalexeev`, `jira__field__priority: Hight`.
   * Please note, for values takes array, please provide it as comma-separated string (), like: `jira__field__labels: 'label_one, labelTwo, label:three'`
 * `jira__field__name__<n>`/`jira__field__value__<n>` pairs. See notes below about possible variants of quoting and names providing
+* `jira__alert_identify_label` - template (as described later) of additional label to identify issue update (or resolving). By default, `alert{${context.alert.hashCode()}}` 
+* `jira__jql_to_find_issue_for_update`. By default `labels = "alert{${context.alert.hashCode()}}"`. Provide false or empty value to do not search previous issues
+* `jira__comment_in_present_issues` - template to use for comment issue, if that already present. Be careful - all issues by `JQL` will be commented!
 
 #### Field names normalization
 
@@ -108,6 +111,23 @@ annotations:
   # Field "Итоговый результат"
   jira__field__customId__10217: 'Some result description (описание результата)'
 ```
+
+#### Values templating
+
+Suppose you have in alert definition:
+```yaml
+  labels:
+    severity: warning
+  annotations:
+    jira__field__labels: 'label_one, labelTwo, label:three, severity:${context.field("severity")}'
+```
+
+For the values `context` see class [AlertContext](src/main/groovy/info/hubbitus/AlertContext.groovy). There are many interesting fields for use, like:
+* `alert` - [Alert](src/main/groovy/info/hubbitus/DTO/Alert.groovy) object of incoming data
+* `jiraPresentIssues` - search result of found by alert code issues, created early (we automatically create label `Alert(<hashCode>)` to identify updates).
+* `jiraProject` - information and metadata of target JIRA project where task should be created (see `jira__project_key` description before)
+* `jiraIssueType` - information and metadata of target JIRA IssueType (see `jira__issue_type_name` early)
+* `jiraFields` - jira fields, parsed by rules and heuristics described  in previous section. There also metadata for each field present for introspection and validation
 
 ## Tech overview
 This project uses Quarkus, the Supersonic Subatomic Java Framework.

@@ -1,10 +1,7 @@
 package info.hubbitus
 
 import com.atlassian.jira.rest.client.api.*
-import com.atlassian.jira.rest.client.api.domain.BasicIssue
-import com.atlassian.jira.rest.client.api.domain.CimFieldInfo
-import com.atlassian.jira.rest.client.api.domain.IssueType
-import com.atlassian.jira.rest.client.api.domain.Project
+import com.atlassian.jira.rest.client.api.domain.*
 import com.atlassian.jira.rest.client.api.domain.input.ComplexIssueInputFieldValue
 import com.atlassian.jira.rest.client.api.domain.input.FieldInput
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput
@@ -19,6 +16,8 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.jboss.logging.Logger
+
+import static info.hubbitus.OptionsFields.JIRA__COMMENT_IN_PRESENT_ISSUES
 
 //@CompileStatic
 @ApplicationScoped
@@ -73,23 +72,35 @@ class JiraService {
 	}
 
 
-
 	List<BasicIssue> process(AlertRequest alertRequest){
-//        IssueRestClient issueClient = jira.jiraRestClient.getIssueClient()
-//        jira.jiraRestClient.getSearchClient()
-//		Promise<Issue> promise = issueClient.getIssue('DATA-1')
-//		Issue issue = promise.claim()
-
-//		def searchClient = jiraRestClient.getSearchClient()
-//		SearchResult res = searchClient.searchJql("labels = alert(${alert.hashCode})").claim()
 		return alertRequest.alerts.collect{ Alert alert ->
 			AlertContext alerting = new AlertContext(
 				alert: alert,
-				jiraProject: getProjectByCode(alert.params.jira__project_key),
 				jiraService: this
 			)
-			createIssue(alerting) // TODO also updates
-		}
+			if (alerting.jiraPresentIssues.total > 0){
+				log.info("Found ${alerting.jiraPresentIssues.total} previous issues: ${alerting.jiraPresentIssues.issues*.key}. Will add comments")
+				String commentText = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
+				if (commentText){
+					return alerting.jiraPresentIssues.issues.collect { Issue issue ->
+						log.info("Add comment on issue ${issue.key}")
+						commentIssue(issue, alerting)
+						return issue
+					}
+				}
+			}
+			else {
+				log.info("Previous issues is not found. Creating new.")
+				return createIssue(alerting)
+			}
+		}.flatten() as List<BasicIssue>
+	}
+
+	def commentIssue(Issue issue, AlertContext alerting){
+		issueClient.addComment(
+			issue.getCommentsUri(),
+			Comment.valueOf(alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key))
+		).claim()
 	}
 
 	BasicIssue createIssue(AlertContext alerting){
@@ -105,8 +116,8 @@ class JiraService {
 	**/
 	private static IssueInput createIssueInput(AlertContext alerting){
 		IssueInputBuilder builder = new IssueInputBuilder(alerting.jiraProject, alerting.jiraIssueType)
-			.setSummary(alerting.alert.params.summary)
-			.setDescription(alerting.alert.params.description)
+			.setSummary(alerting.field('summary'))
+			.setDescription(alerting.field('description'))
 
 		alerting.jiraFields
 			.each { String key, JiraFieldMap field ->
@@ -128,7 +139,7 @@ class JiraService {
 						)
 					}
 				}
-				else{
+				else{ // Scalars
 					builder.setFieldInput(
 						new FieldInput (
 							(field.meta.schema.system ?: key.toLowerCase()),

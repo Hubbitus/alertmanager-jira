@@ -21,12 +21,13 @@
         "description": "Some description QAZ2\nof DataTest0 alert\nVALUE: 3\n",
         "jira__field__assignee": "plalexeev",
         "jira__field__component_s": "DQ-support, DevOps-infrastructure",
-        "jira__field__labels": "label_one, labelTwo, label:three",
         "jira__issue_type_name": "Alert",
         "jira__project_key": "DATA",
         "qaz1_annotation": "qaz1_annotation_value",
+        "jira__field__labels": "label_one, labelTwo, label:three, severity:${context.field('severity')}",
         "summary": "DataTest0 summary",
-        "value": "3"
+        "value": "3",
+        "jira__comment_in_present_issues": "Looks like error happened again!"
       },
       "startsAt": "2023-11-05T23:05:29.64Z",
       "endsAt": "0001-01-01T00:00:00Z",

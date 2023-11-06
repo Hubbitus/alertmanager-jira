@@ -3,9 +3,14 @@ package info.hubbitus
 import com.atlassian.jira.rest.client.api.domain.CimFieldInfo
 import com.atlassian.jira.rest.client.api.domain.IssueType
 import com.atlassian.jira.rest.client.api.domain.Project
+import com.atlassian.jira.rest.client.api.domain.SearchResult
+import groovy.text.SimpleTemplateEngine
 import groovy.transform.Canonical
+import groovy.transform.Memoized
 import groovy.transform.ToString
 import info.hubbitus.DTO.Alert
+
+import static info.hubbitus.OptionsFields.*
 
 /**
 * Context of alerting.
@@ -17,15 +22,33 @@ class AlertContext {
 //	public static final String JIRA_KEY_PREFIX = 'jira__'
 	public static final String JIRA_FIELD_KEY_PREFIX = 'jira__field__'
 
-	Alert alert
+	public Alert alert
 
 	private JiraService jiraService
 
-	Project jiraProject
 	@Lazy
-	IssueType jiraIssueType = {
+	public SearchResult jiraPresentIssues = {
+		String jql = field(
+			JIRA__JQL_TO_FIND_ISSUE_FOR_UPDATE.key
+			,JIRA__JQL_TO_FIND_ISSUE_FOR_UPDATE.defaultValue
+		)
+		if (jql){
+			return jiraService.searchClient.searchJql(jql).claim()
+		}
+		else {
+			return null
+		}
+	}()
+
+	@Lazy
+	public Project jiraProject = {
+		jiraService.getProjectByCode(field(JIRA__PROJECT_KEY.key))
+	}()
+
+	@Lazy
+	public IssueType jiraIssueType = {
 		(IssueType)jiraProject.getIssueTypes().find{ IssueType type ->
-			type.name == alert.params.jira__issue_type_name
+			type.name == field(JIRA__ISSUE_TYPE_NAME.key)
 		}
 	}()
 
@@ -35,7 +58,7 @@ class AlertContext {
 	}()
 
 	@Lazy
-	Map<String, JiraFieldMap> jiraFields = {
+	public Map<String, JiraFieldMap> jiraFields = {
 		parseJiraFields()
 	}()
 
@@ -105,7 +128,7 @@ class AlertContext {
 				switch (true) {
 					case field.name.startsWith('name__'): // Name/value pair. E.g. jira__field__name__2: 'Итоговый результат'/jira__field__value__2: 'Some result description (описание результата)'
 						field.name = field.name - 'name__'
-						field.value = alert.params."${JIRA_FIELD_KEY_PREFIX}__value__${field.name}"
+						field.rawValue = alert.params."${JIRA_FIELD_KEY_PREFIX}__value__${field.name}"
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it -> field.name == it.name}
 						if (!field.meta) {
 							throw new IllegalStateException("Name/value pair used for get field: field.name=[${field.name}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
@@ -117,7 +140,7 @@ class AlertContext {
 
 					case field.name.startsWith('customId'):
 						def customFieldId = field.name - 'customId__'
-						field.value = param.value
+						field.rawValue = param.value
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it-> customFieldId as Long == it.schema.customId }
 						if (!field.meta) {
 							throw new IllegalStateException("CustomId scheme used to specify field id=[${customFieldId}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
@@ -129,7 +152,7 @@ class AlertContext {
 
 					default: // Assume simple variant with identifiers and _ replacements
 						field.name = nameNormalize(field.name)
-						field.value = param.value
+						field.rawValue = param.value
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it -> nameNormalize(it.name) == nameNormalize(field.name)}
 						if (!field.meta) {
 							throw new IllegalStateException("Default identifier _ substitution scheme used to specify field field.name=[${field.name}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
@@ -140,17 +163,17 @@ class AlertContext {
 				}
 
 				handleTargetMetaType(field)
-				return [ (field.name):  field ]
+				return [ (field.name): field ]
 			}
 
 		addAlertHashCode(res)
 		return res as Map<String, JiraFieldMap>
 	}
 
-	static void handleTargetMetaType(JiraFieldMap field){
-		field.rawValue = field.value
+	private void handleTargetMetaType(JiraFieldMap field){
+		field.value = field.rawValue = new SimpleTemplateEngine().createTemplate(field.rawValue).make([context: this]).toString()
 		if (field.meta.schema.type == 'array') {
-			field.value = field.value.split(/\s*,\s*/) as Set
+			field.value = field.rawValue.split(/\s*,\s*/) as Set
 			if (field.meta.allowedValues) {
 				field.value = field.value.collect {String it ->
 					def value = field.meta.allowedValues.find{ metaVal ->
@@ -167,12 +190,12 @@ class AlertContext {
 
 	void addAlertHashCode(Map<String, JiraFieldMap> fields){
 		if (fields.Labels){
-			fields.Labels.value += ("alert(${alert.hashCode()})" as String)
+			fields.Labels.value += issueIdentificationLabel()
 		}
 		else {
 			fields.Labels = new JiraFieldMap(
 				name: 'Labels',
-				value: [("alert(${alert.hashCode()})" as String)] as Set,
+				value: [issueIdentificationLabel()] as Set,
 				meta: (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it -> 'Labels' == it.name}
 			)
 		}
@@ -180,5 +203,36 @@ class AlertContext {
 
 	static String nameNormalize(String input){
 		return input.toLowerCase().replaceAll(/[^0-9a-zA-Z_]/, '_')
+	}
+
+	/**
+	* Just fast access to do not check always in labels and annotations.
+	* Also handling templating by <a href="https://docs.groovy-lang.org/docs/next/html/documentation/template-engines.html#_simpletemplateengine">SimpleTemplateEngine</a>
+	* @link template()
+	**/
+	@Memoized
+	String field(String name, String defaultValue = null){
+		return template(((alert.labels + alert.annotations)[name] ?: defaultValue))
+	}
+
+	private String issueIdentificationLabel(){
+		field(JIRA__ALERT_IDENTIFY_LABEL.key, JIRA__ALERT_IDENTIFY_LABEL.defaultValue)
+	}
+
+	/**
+	* Suppose you have in alert definition where you want reference other fields and expressions:
+	* <code>>
+	* labels:
+	*   severity: warning
+	* annotations:
+	*   jira__field__labels: 'label_one, labelTwo, label:three, severity:${context.field("severity")}'
+	* </code>
+	* See more details and examples in readme.
+	**/
+	@Memoized
+	String template(String text){
+		if (!text)
+			return text
+		return new SimpleTemplateEngine().createTemplate(text).make([context: this]).toString()
 	}
 }

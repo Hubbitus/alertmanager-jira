@@ -8,8 +8,6 @@ import info.hubbitus.DTO.Alert
 import info.hubbitus.DTO.AlertRequest
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
-import org.hamcrest.Matcher
-import org.hamcrest.collection.IsIterableContainingInAnyOrder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -61,7 +59,6 @@ class JiraServiceTest {
 		List<IssueInput> issuesToCreate = alertRequest.alerts.collect{ Alert alert ->
 			AlertContext alerting = new AlertContext(
 				alert: alert,
-				jiraProject: jiraService.getProjectByCode(alert.params.jira__project_key),
 				jiraService: jiraService
 			)
 			alertContexts.add(alerting) // To check parsing

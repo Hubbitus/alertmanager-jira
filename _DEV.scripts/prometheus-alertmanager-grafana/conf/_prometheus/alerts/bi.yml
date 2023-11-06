@@ -36,6 +36,8 @@ groups:
           Some description QAZ2
           of DataTest0 alert
           VALUE: {{$value}}
+        jira__comment_in_present_issues: |
+          Looks like error happened again!
 
     - alert: DataTest1
       expr: 'promhttp_metric_handler_requests_total > 1'
