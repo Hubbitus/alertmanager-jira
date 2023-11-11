@@ -171,8 +171,10 @@ class AlertContext {
 	}
 
 	private void handleTargetMetaType(JiraFieldMap field){
-		field.value = field.rawValue = new SimpleTemplateEngine().createTemplate(field.rawValue).make([context: this]).toString()
+		field.value = field.rawValue = new SimpleTemplateEngine().createTemplate(field.rawValue as String).make([context: this]).toString()
 		if (field.meta.schema.type == 'array') {
+			//See IDEA bug https://youtrack.jetbrains.com/issue/IDEA-179791
+			//noinspection GroovyAssignabilityCheck
 			field.value = field.rawValue.split(/\s*,\s*/) as Set
 			if (field.meta.allowedValues) {
 				field.value = field.value.collect {String it ->

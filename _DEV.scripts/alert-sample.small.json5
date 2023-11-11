@@ -1,4 +1,3 @@
-// Shorter variant of alert-sample.json5 with single alert
 {
   "receiver": "jira-data",
   "status": "firing",
