@@ -22,7 +22,7 @@ receivers:
   rules:
     - alert: DataTest0
       expr: 'promhttp_metric_handler_requests_total > 1'
-#      for: 10s
+      # for: 10s
       labels:
         severity: warning
         jira__severity: High
@@ -201,4 +201,3 @@ podman run -it --rm --name traching-receiver-manual \
     -v /home/pasha/@Projects/@DATA/kafka.scripts/conf/DEV/:/work/_conf:Z,ro \
         localhost/local/alertmanager-jira:latest pwd
 ```
-s
