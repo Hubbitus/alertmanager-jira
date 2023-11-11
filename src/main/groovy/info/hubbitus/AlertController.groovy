@@ -13,6 +13,7 @@ import static jakarta.ws.rs.core.MediaType.*
 @Path('/')
 @Consumes(WILDCARD)
 @Produces(APPLICATION_JSON)
+@SuppressWarnings('unused')
 class AlertController {
     @Inject
     JiraService jira
@@ -24,7 +25,7 @@ class AlertController {
     @Path('/ping')
     @Consumes(WILDCARD)
     @Produces(TEXT_PLAIN)
-    @SuppressWarnings('UnnecessaryPublicModifier') // That is controller, public required
+    @SuppressWarnings(['GrUnnecessaryPublicModifier', 'GrMethodMayBeStatic']) // That is controller, public required
     public Response ping() {
         return Response.ok().entity('pong').build()
     }
@@ -33,7 +34,7 @@ class AlertController {
     @Path('/alert')
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @SuppressWarnings('UnnecessaryPublicModifier') // That is controller, public required
+    @SuppressWarnings(['GrUnnecessaryPublicModifier']) // That is controller, public required
     public Response alert(AlertRequest alertRequest) {
         log.debug('Got alertRequest: ' + alertRequest)
 
@@ -42,7 +43,7 @@ class AlertController {
         return Response.ok().entity(
             new JsonBuilder([
                 result: 'ok',
-                created_issues: issues*.key
+                affected_issues: issues*.key
             ])
         ).build()
     }

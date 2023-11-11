@@ -79,15 +79,15 @@ class JiraService {
 				jiraService: this
 			)
 			if (alerting.jiraPresentIssues.total > 0){
-				log.info("Found ${alerting.jiraPresentIssues.total} previous issues: ${alerting.jiraPresentIssues.issues*.key}. Will add comments")
+				log.info("Found ${alerting.jiraPresentIssues.total} previous issues: ${alerting.jiraPresentIssues.issues*.key}. Will add comment")
 				String commentText = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
 				if (commentText){
-					return alerting.jiraPresentIssues.issues.collect { Issue issue ->
+					alerting.jiraPresentIssues.issues.each { Issue issue ->
 						log.info("Add comment on issue ${issue.key}")
 						commentIssue(issue, alerting)
-						return issue
 					}
 				}
+				return alerting.jiraPresentIssues.issues
 			}
 			else {
 				log.info("Previous issues is not found. Creating new.")

@@ -66,7 +66,7 @@ The most important which must be set for rule:
 * `jira__field__name__<n>`/`jira__field__value__<n>` pairs. See notes below about possible variants of quoting and names providing
 * `jira__alert_identify_label` - template (as described later) of additional label to identify issue update (or resolving). By default, `alert{${context.alert.hashCode()}}` 
 * `jira__jql_to_find_issue_for_update`. By default `labels = "alert{${context.alert.hashCode()}}"`. Provide false or empty value to do not search previous issues
-* `jira__comment_in_present_issues` - template to use for comment issue, if that already present. Be careful - all issues by `JQL` will be commented!
+* `jira__comment_in_present_issues` - template to use for comment issue, if that already present. Be careful - all issues by `JQL` from `jira__jql_to_find_issue_for_update` will be commented!
 
 #### Field names normalization
 

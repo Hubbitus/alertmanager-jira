@@ -7,6 +7,7 @@ quarkus:
   native:
     resources:
       includes: '*.json'
+
   log:
     category:
       "info.hubbitus":
@@ -16,5 +17,5 @@ jira:
   URL: https://jira-lab.gid.team/
 #  URL: https://jira-new.gid.team/
   username: plalexeev
-  # Must be provided securely, f.e. by env variable JIRA_PASSWORD
+  # Must be provided securely, e.g. by env variable JIRA_PASSWORD
 #  password:
