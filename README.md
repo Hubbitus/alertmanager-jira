@@ -196,8 +196,8 @@ See [documentation](https://quarkus.io/guides/building-native-image#creating-a-c
 ### Running in a container
 
 ```shell
-podman run -it --rm --name traching-receiver-manual \
+podman run -it --rm --name alertmanajer-jira-manual \
     -p 8080:8080 \
     -v /home/pasha/@Projects/@DATA/kafka.scripts/conf/DEV/:/work/_conf:Z,ro \
-        localhost/local/alertmanager-jira:latest pwd
+        localhost/local/alertmanager-jira:latest
 ```

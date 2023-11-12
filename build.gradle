@@ -53,7 +53,7 @@ repositories {
         // See https://github.com/oracle/graal/issues/5504
 //        implementation 'io.quarkus:quarkus-netty:3.5.1'
         // https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
-        implementation 'org.glassfish.jersey.core:jersey-common:2.0.0'
+//        implementation 'org.glassfish.jersey.core:jersey-common:2.0.0'
     }
 }
 
