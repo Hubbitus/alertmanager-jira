@@ -19,7 +19,7 @@ quarkus:
       debug: false
       level: WARN
       traces-sample-rate: 1
-      in-app-packages: ru.gid.tracker
+      in-app-packages: info.hubbitus
       # dsn:
 
 jira:

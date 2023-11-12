@@ -5,4 +5,4 @@ podman rm -vf alertmanager-jira-manual
 podman run --rm -i --name alertmanager-jira-manual -p 8080:8080 \
 	-e JIRA_PASSWORD="$(pass show GID.ru/AD.plalexeev)" \
 	-e SCRIPT_DEBUG=true \
-		hubbitus/alertmanager-jira:v1.0.0
+		hubbitus/alertmanager-jira:v1.0.1

@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'io.quarkus' version '3.4.3'
+    id 'io.quarkus' version "$quarkusPluginVersion"
     id 'groovy'
 }
 
@@ -14,27 +14,27 @@ repositories {
     }
     dependencies {
         implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-        implementation 'io.quarkus:quarkus-container-image-jib'
-        implementation 'io.quarkus:quarkus-resteasy-reactive'
-        implementation 'io.quarkus:quarkus-config-yaml'
+        implementation "io.quarkus:quarkus-container-image-jib:${quarkusPlatformVersion}"
+        implementation "io.quarkus:quarkus-resteasy-reactive:${quarkusPlatformVersion}"
+        implementation "io.quarkus:quarkus-config-yaml:${quarkusPlatformVersion}"
 
         /**
         * Unfortunately Spock is not supported yet, so use JUnit5.
         * @link <a href="https://github.com/quarkusio/quarkus/issues/6506">Quarkus issue for that</a>
         * @link <a href="https://github.com/quarkusio/quarkus/issues/30221">Quarkus spock extension proposal</a>
         **/
-        testImplementation 'io.quarkus:quarkus-junit5'
+        testImplementation "io.quarkus:quarkus-junit5:${quarkusPlatformVersion}"
         testImplementation 'io.rest-assured:rest-assured:5.3.2'
         testImplementation 'org.mockito:mockito-core:5.7.0'
 
 
-        implementation 'io.quarkiverse.groovy:quarkus-groovy:3.4.0'
+        implementation "io.quarkiverse.groovy:quarkus-groovy:3.5.0"
         implementation 'org.apache.groovy:groovy-json:4.0.15'
         implementation 'org.apache.groovy:groovy-templates:4.0.15'
 
 
-        testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
-        testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
+//        testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
+//        testImplementation 'net.bytebuddy:byte-buddy:1.14.9'
         // !!! Manually built https://github.com/roggenbrot/quarkus-spock
 //        implementation 'io.quarkiverse.spock:quarkus-spock:1.0-SNAPSHOT'
         implementation 'org.apache.logging.log4j:log4j-core:2.21.1'
@@ -56,7 +56,7 @@ repositories {
 //        implementation 'org.glassfish.jersey.core:jersey-common:2.0.0'
 
         implementation 'io.quarkiverse.loggingsentry:quarkus-logging-sentry:2.0.4'
-        implementation 'io.quarkus:quarkus-micrometer-registry-prometheus'
+        implementation "io.quarkus:quarkus-micrometer-registry-prometheus:${quarkusPluginVersion}"
     }
 }
 
