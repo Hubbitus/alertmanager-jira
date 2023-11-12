@@ -57,6 +57,18 @@ repositories {
 
         implementation 'io.quarkiverse.loggingsentry:quarkus-logging-sentry:2.0.4'
         implementation "io.quarkus:quarkus-micrometer-registry-prometheus:${quarkusPluginVersion}"
+
+        // Native built error workaround:
+        // Error: Class initialization of org.glassfish.jersey.message.internal.DataSourceProvider failed. This error is reported at image build time because class org.glassfish.jersey.message.internal.DataSourceProvider is registered for linking at image build time by command line and command line. Use the option
+        //    '--initialize-at-run-time=org.glassfish.jersey.message.internal.DataSourceProvider'
+        // to explicitly request initialization of this class at run time.
+        //com.oracle.svm.core.util.UserError$UserException: Class initialization of org.glassfish.jersey.message.internal.DataSourceProvider failed. This error is reported at image build time because class org.glassfish.jersey.message.internal.DataSourceProvider is registered for linking at image build time by command line and command line. Use the option
+        //    '--initialize-at-run-time=org.glassfish.jersey.message.internal.DataSourceProvider'
+        // to explicitly request initialization of this class at run time.
+        // ...
+        //Caused by: java.lang.NoClassDefFoundError: javax/activation/DataSource
+        // See discussion about it in chat: https://quarkusio.zulipchat.com/#narrow/stream/187030-users/topic/UnresolvedElementException.3A.20Localizer.20is.20registered.20for.20link
+        implementation 'javax.activation:activation:1.1.1'
     }
 }
 
