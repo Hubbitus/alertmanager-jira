@@ -13,6 +13,15 @@ quarkus:
       "info.hubbitus":
         level: DEBUG
 
+    sentry:
+      # Disabled until DSN will be created
+      ~: true
+      debug: false
+      level: WARN
+      traces-sample-rate: 1
+      in-app-packages: ru.gid.tracker
+      # dsn:
+
 jira:
   URL: https://jira-lab.gid.team/
 #  URL: https://jira-new.gid.team/

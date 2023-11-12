@@ -54,6 +54,9 @@ repositories {
 //        implementation 'io.quarkus:quarkus-netty:3.5.1'
         // https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
 //        implementation 'org.glassfish.jersey.core:jersey-common:2.0.0'
+
+        implementation 'io.quarkiverse.loggingsentry:quarkus-logging-sentry:2.0.4'
+        implementation 'io.quarkus:quarkus-micrometer-registry-prometheus'
     }
 }
 
