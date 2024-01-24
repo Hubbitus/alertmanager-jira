@@ -25,12 +25,12 @@ receivers:
       # for: 10s
       labels:
         severity: warning
-        jira__severity: High
+        jira__field__severity: High
         value: '{{$value}}'
       annotations:
-        jira__project_key: DATA
-        jira__issue_type_name: Alert
-        jira__assignee: plalexeev
+        jira__field__project_key: DATA
+        jira__field__issue_type_name: Alert
+        jira__field__assignee: plalexeev
         summary: DataTest0 summary
         description: |
           Some description QAZ2
@@ -74,7 +74,7 @@ Due to the alertmanager YAML schema binding, all labels and annotations must be 
 So, unfortunately **you can't set something like**:
 ```yaml
 annotations:
-  "jira__field__Component/s": 'DQ-support, DevOps-infrastructure'
+  "jira__field__Component/s": 'DQ-issues+alerts, DevOps+infrastructure'
   "jira__field__Target start": '2023-11-06'
   "jira__field__Итоговый результат": 'Some result description (описание результата)'
 ```
@@ -86,7 +86,7 @@ Names may be passed in lowercase and all non-identifier symbols (by regexp: [^0-
 For example:
 ```yaml
 annotations:
-  jira__field__component_s: 'DQ-support, DevOps-infrastructure'
+  jira__field__component_s: 'DQ-issues+alerts, DevOps+infrastructure'
   jira__field__target_start: '2023-11-06'
 ```
 
@@ -96,7 +96,7 @@ Continue example:
 ```yaml
 annotations:
   jira__field__name__1: 'Component/s'
-  jira__field__value__1: 'DQ-support, DevOps-infrastructure'
+  jira__field__value__1: 'DQ-issues+alerts, DevOps+infrastructure'
   jira__field__name__2: 'Итоговый результат'
   jira__field__value__2: 'Some result description (описание результата)'
 ```

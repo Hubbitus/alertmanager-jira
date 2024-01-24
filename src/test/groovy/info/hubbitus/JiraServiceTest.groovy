@@ -55,7 +55,7 @@ class JiraServiceTest {
 		assertThat('0 alert name should be DataTest0 alert', alert0.labels.alertname, equalTo('DataTest0'))
 		assertThat(alert0.status, equalTo('firing'))
 
-		Set<AlertContext> alertContexts = []
+		List<AlertContext> alertContexts = []
 		List<IssueInput> issuesToCreate = alertRequest.alerts.collect{ Alert alert ->
 			AlertContext alerting = new AlertContext(
 				alert: alert,
@@ -85,17 +85,17 @@ class JiraServiceTest {
 		assertThat(alertContext0.jiraFields.Assignee.value, equalTo('plalexeev'))
 
 		assertThat(alertContext0.jiraFields.'Component/s'.name, equalTo('Component/s'))
-		assertThat(alertContext0.jiraFields.'Component/s'.rawValue, equalTo('DQ-support, DevOps-infrastructure'))
+		assertThat(alertContext0.jiraFields.'Component/s'.rawValue, equalTo('DQ-issues+alerts, DevOps+infrastructure'))
 		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[0], instanceOf(BasicComponent.class))
 		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[0].id, notNullValue())
-		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[0].name, equalTo('DevOps-infrastructure'))
+		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[0].name, equalTo('DevOps+infrastructure'))
 		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[1], instanceOf(BasicComponent.class))
-		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[1].name, equalTo('DQ-support'))
+		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[1].name, equalTo('DQ-issues+alerts'))
 		assertThat(alertContext0.jiraFields.'Component/s'.value.sort()[1].id, notNullValue())
 
 		assertThat(alertContext0.jiraFields.Labels.name, equalTo('Labels'))
-		assertThat(alertContext0.jiraFields.Labels.rawValue, equalTo('label_one, labelTwo, label:three'))
-		assertThat(alertContext0.jiraFields.Labels.value, equalTo(['label_one', 'label:three', 'alert(-560575869)', 'labelTwo'] as Set))
+		assertThat(alertContext0.jiraFields.Labels.rawValue, equalTo('label_one, labelTwo, label:three, plalexeev'))
+		assertThat(alertContext0.jiraFields.Labels.value, equalTo(['label_one', 'plalexeev', 'alert[656476370]', 'label:three', 'labelTwo'] as Set))
 
 
 		// 1 alert:
@@ -113,7 +113,7 @@ class JiraServiceTest {
 
 		assertThat(alertContext1.jiraFields.Labels.name, equalTo('Labels'))
 		assertThat(alertContext1.jiraFields.Labels.rawValue, nullValue())
-		assertThat(alertContext1.jiraFields.Labels.value, equalTo(['alert(753956055)'] as Set))
+		assertThat(alertContext1.jiraFields.Labels.value, equalTo(['alert[753956055]'] as Set))
 	}
 
 	/* *********************
