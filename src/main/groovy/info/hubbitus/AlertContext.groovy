@@ -78,7 +78,7 @@ class AlertContext {
 	* So, unfortunately **you can't set something like**:
 	* ```yaml
 	* annotations:
-	* "jira__field__Component/s": 'DQ-support, DevOps-infrastructure'
+	* "jira__field__Component/s": 'DQ-issues+alerts, DevOps+infrastructure'
 	* "jira__field__Target start": '2023-11-06'
 	* "jira__field__Итоговый результат": 'Some result description (описание результата)'
 	* ```
@@ -90,7 +90,7 @@ class AlertContext {
 	* For example:
 	* ```yaml
 	* annotations:
-	* jira__field__component_s: 'DQ-support, DevOps-infrastructure'
+	* jira__field__component_s: 'DQ-issues+alerts, DevOps+infrastructure'
 	* jira__field__target_start: '2023-11-06'
 	* ```
 	*
@@ -100,7 +100,7 @@ class AlertContext {
 	* ```yaml
 	* annotations:
 	* jira__field__name__1: 'Component/s'
-	* jira__field__value__1: 'DQ-support, DevOps-infrastructure'
+	* jira__field__value__1: 'DQ-issues+alerts, DevOps+infrastructure'
 	* jira__field__name__2: 'Итоговый результат'
 	* jira__field__value__2: 'Some result description (описание результата)'
 	* ```

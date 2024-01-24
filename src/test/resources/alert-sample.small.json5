@@ -20,7 +20,7 @@
       "annotations": {
         "description": "Some description QAZ2\nof DataTest0 alert\nVALUE: 3\n",
         "jira__field__assignee": "plalexeev",
-        "jira__field__component_s": "DQ-support, DevOps-infrastructure",
+        "jira__field__component_s": "DQ-issues+alerts, DevOps+infrastructure",
         "jira__issue_type_name": "Alert",
         "jira__project_key": "DATA",
         "qaz1_annotation": "qaz1_annotation_value",

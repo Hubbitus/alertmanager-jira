@@ -17,13 +17,13 @@ groups:
         # See https://groups.google.com/g/prometheus-users/c/7Ul6ngc7Ogs/m/j_YDszV5BwAJ
         # So, probably that should be placed into annotations!
 #        value: '{{$value}}'
-        # Example of overwrite global labels set in prometheus's `external_labels` config:
+        # Example of overwriting global labels set in prometheus's `external_labels` config:
         global_label_1: 2
       annotations:
         jira__project_key: DATA
         jira__issue_type_name: Alert
         jira__field__assignee: plalexeev
-        jira__field__component_s: 'DQ-support, DevOps-infrastructure'
+        jira__field__component_s: 'DQ-issues+alerts, DevOps+infrastructure'
         jira__field__labels: 'label_one, labelTwo, label:three'
         jira__field__name__1: 'Итоговый результат'
         jira__field__value__1: 'Some result description (описание результата)'

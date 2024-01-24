@@ -127,7 +127,7 @@ class JiraService {
 							new FieldInput ((field.meta.schema.system ?: key.toLowerCase()), field.value)
 						)
 					}
-					else{ // Complex values like Component/s: builder.setComponentsNames(['DQ-support', 'DevOps-infrastructure']) // Works
+					else{ // Complex values like Component/s: builder.setComponentsNames(['DQ-issues+alerts', 'DevOps+infrastructure']) // Works
 						builder.setFieldInput(
 							new FieldInput (
 								(field.meta.schema.system ?: key.toLowerCase()),
