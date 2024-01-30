@@ -36,7 +36,7 @@ class JiraService {
 
 	@Lazy
 	public JiraRestClient jiraRestClient = {
-		log.debug("Lazy init; jiraURL=${jiraURL}, username=${username}")
+		log.debug("Lazy init jira client; jiraURL=${jiraURL}, username=${username}")
 		return new AsynchronousJiraRestClientFactory()
 			.createWithBasicHttpAuthentication(jiraURL, this.username, this.password)
 	}()
@@ -79,18 +79,18 @@ class JiraService {
 				jiraService: this
 			)
 			if (alerting.jiraPresentIssues.total > 0){
-				log.info("Found ${alerting.jiraPresentIssues.total} previous issues: ${alerting.jiraPresentIssues.issues*.key}. Will add comment")
+				log.info("Found ${alerting.jiraPresentIssues.total} previous issue(s): ${alerting.jiraPresentIssues.issues*.key.collect{key -> "${jiraURL}browse/${key}"}}. Will add comment")
 				String commentText = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
 				if (commentText){
 					alerting.jiraPresentIssues.issues.each { Issue issue ->
-						log.info("Add comment on issue ${issue.key}")
+						log.info("Add comment on the issue ${jiraURL}browse/${issue.key}")
 						commentIssue(issue, alerting)
 					}
 				}
 				return alerting.jiraPresentIssues.issues
 			}
 			else {
-				log.info("Previous issues is not found. Creating new.")
+				log.info('Previous issues had not found. Creating new.')
 				return createIssue(alerting)
 			}
 		}.flatten() as List<BasicIssue>
