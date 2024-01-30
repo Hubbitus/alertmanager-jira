@@ -2,6 +2,11 @@
 
 Prometheus alertmanager plugin which creates and manages JIRA issues by alerts.
 
+## Container images
+Docker images are available at https://hub.docker.com/r/hubbitus/alertmanager-jira
+
+[![docker images](https://img.shields.io/badge/docker-images-green)](https://hub.docker.com/r/hubbitus/alertmanager-jira)
+
 ## Configuration
 
 Sample configuration how to run in `podman-compose` full stack prometheus+alertmanager+grafana see in directory [_DEV.scripts/prometheus-alertmanager-grafana]()
