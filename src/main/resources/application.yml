@@ -32,6 +32,7 @@ quarkus:
 jira:
   URL: https://jira-lab.gid.team/
 #  URL: https://jira-new.gid.team/
-  username: plalexeev
+#  username: plalexeev
+  username: jira-data-svc
   # Must be provided securely, e.g. by env variable JIRA_PASSWORD
 #  password:

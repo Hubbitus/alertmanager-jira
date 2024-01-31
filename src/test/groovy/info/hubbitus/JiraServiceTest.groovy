@@ -5,6 +5,7 @@ import com.atlassian.jira.rest.client.api.domain.input.IssueInput
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import info.hubbitus.DTO.Alert
+import info.hubbitus.DTO.AlertContext
 import info.hubbitus.DTO.AlertRequest
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject

@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 
 @Canonical
 @AutoClone
-@ToString(includeNames = true)
+@ToString(includeNames=true, includePackage=false)
 class Alert {
 	@JsonBackReference
 	public AlertRequest alertRequestParent
