@@ -11,13 +11,15 @@ import com.google.common.base.Function
 import com.google.common.collect.Iterables
 import groovy.transform.Memoized
 import info.hubbitus.DTO.Alert
+import info.hubbitus.DTO.AlertContext
 import info.hubbitus.DTO.AlertRequest
+import info.hubbitus.DTO.JiraFieldMap
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.jboss.logging.Logger
 
-import static info.hubbitus.OptionsFields.JIRA__COMMENT_IN_PRESENT_ISSUES
+import static info.hubbitus.DTO.OptionsFields.JIRA__COMMENT_IN_PRESENT_ISSUES
 
 //@CompileStatic
 @ApplicationScoped
@@ -79,27 +81,28 @@ class JiraService {
 				jiraService: this
 			)
 			if (alerting.jiraPresentIssues.total > 0){
-				log.info("Found ${alerting.jiraPresentIssues.total} previous issue(s): ${alerting.jiraPresentIssues.issues*.key.collect{key -> "${jiraURL}browse/${key}"}}. Will add comment")
+				log.info("Found ${alerting.jiraPresentIssues.total} previous issue(s): ${alerting.jiraPresentIssues.issues.collect{issue -> "${jiraURL}browse/${issue.key} «${issue.summary}»"}}. Will add comment")
 				String commentText = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
 				if (commentText){
 					alerting.jiraPresentIssues.issues.each { Issue issue ->
-						log.info("Add comment on the issue ${jiraURL}browse/${issue.key}")
 						commentIssue(issue, alerting)
 					}
 				}
 				return alerting.jiraPresentIssues.issues
 			}
 			else {
-				log.info('Previous issues had not found. Creating new.')
+				log.info('Previous issues had not been found. Creating new.')
 				return createIssue(alerting)
 			}
 		}.flatten() as List<BasicIssue>
 	}
 
 	def commentIssue(Issue issue, AlertContext alerting){
+		String comment = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
+		log.info("Add comment on the issue ${jiraURL}browse/${issue.key} «${issue.summary}»: ${comment}")
 		issueClient.addComment(
 			issue.getCommentsUri(),
-			Comment.valueOf(alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key))
+			Comment.valueOf(comment)
 		).claim()
 	}
 

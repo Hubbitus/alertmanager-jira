@@ -1,4 +1,4 @@
-package info.hubbitus
+package info.hubbitus.DTO
 
 import com.atlassian.jira.rest.client.api.domain.CimFieldInfo
 import com.atlassian.jira.rest.client.api.domain.IssueType
@@ -8,16 +8,16 @@ import groovy.text.SimpleTemplateEngine
 import groovy.transform.Canonical
 import groovy.transform.Memoized
 import groovy.transform.ToString
-import info.hubbitus.DTO.Alert
+import info.hubbitus.JiraService
 
-import static info.hubbitus.OptionsFields.*
+import static OptionsFields.*
 
 /**
 * Context of alerting.
 * Class to collect around information like: Alert, jira project, jira issue type and so on
 **/
 @Canonical
-@ToString(includeNames=true)
+@ToString(includeNames=true, includePackage=false)
 class AlertContext {
 //	public static final String JIRA_KEY_PREFIX = 'jira__'
 	public static final String JIRA_FIELD_KEY_PREFIX = 'jira__field__'

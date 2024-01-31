@@ -1,4 +1,4 @@
-package info.hubbitus
+package info.hubbitus.DTO
 
 /**
 * Also parsed dynamic valies of fields:

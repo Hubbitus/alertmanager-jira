@@ -10,7 +10,7 @@ import groovy.transform.ToString
  */
 @Canonical
 @AutoClone
-@ToString(includeNames = true)
+@ToString(includeNames=true, includePackage=false)
 class AlertRequest {
 	String receiver
 	String status
