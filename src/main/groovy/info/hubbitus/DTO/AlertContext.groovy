@@ -122,21 +122,20 @@ class AlertContext {
 		Map<String, JiraFieldMap> res = alert.params
 			.findAll{it.key.startsWith(JIRA_FIELD_KEY_PREFIX) }
 			.collectEntries { param ->
-				println(param)
 				JiraFieldMap field = new JiraFieldMap(name: param.key - JIRA_FIELD_KEY_PREFIX)
 
 				switch (true) {
 					case field.name.startsWith('name__'): // Name/value pair. E.g. jira__field__name__2: 'Итоговый результат'/jira__field__value__2: 'Some result description (описание результата)'
-						field.name = field.name - 'name__'
-						field.rawValue = alert.params."${JIRA_FIELD_KEY_PREFIX}__value__${field.name}"
+						String valueKey = "${JIRA_FIELD_KEY_PREFIX}value__${field.name - 'name__'}"
+						field.name = param.value
+						field.rawValue = alert.params[valueKey]
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it -> field.name == it.name}
 						if (!field.meta) {
-							throw new IllegalStateException("Name/value pair used for get field: field.name=[${field.name}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
+							throw new IllegalStateException("Name/value pair used to get field: field.name=[${field.name}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
 						}
 						break
-
-					case field.name.startsWith('value__'):
-						break
+					case field.name.startsWith('value__'): // Pair to the 'name__', skipping
+						return
 
 					case field.name.startsWith('customId'):
 						def customFieldId = field.name - 'customId__'

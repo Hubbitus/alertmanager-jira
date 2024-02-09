@@ -99,7 +99,7 @@ class JiraService {
 
 	def commentIssue(Issue issue, AlertContext alerting){
 		String comment = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
-		log.info("Add comment on the issue ${jiraURL}browse/${issue.key} «${issue.summary}»: ${comment}")
+		log.info("Add comment on the issue [${jiraURL}browse/${issue.key} «${issue.summary}»]: ${comment}")
 		issueClient.addComment(
 			issue.getCommentsUri(),
 			Comment.valueOf(comment)
@@ -108,7 +108,7 @@ class JiraService {
 
 	BasicIssue createIssue(AlertContext alerting){
 		BasicIssue res = issueClient.createIssue(createIssueInput(alerting)).claim()
-		log.info("Issue created: ${res.key}")
+		log.info("Issue created: ${jiraURL}browse/${res.key}")
 		return res
 	}
 
@@ -156,7 +156,7 @@ class JiraService {
 	}
 
 	/**
-	* @link com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder#toListOfComplexIssueInputFieldValueWithSingleKey(java.lang.Iterable, java.lang.String). Copy/paste. Unfortunately that is provate
+	* @link com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder#toListOfComplexIssueInputFieldValueWithSingleKey(java.lang.Iterable, java.lang.String). Copy/paste. Unfortunately that is private
 	**/
 	private static <T> Iterable<ComplexIssueInputFieldValue> toListOfComplexIssueInputFieldValueWithSingleKey(final Iterable<T> items, final String key) {
 		return Iterables.transform(items, new Function<T, ComplexIssueInputFieldValue>() {
