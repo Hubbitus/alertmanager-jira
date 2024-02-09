@@ -29,10 +29,29 @@ class AlertControllerTest {
 	}
 
 	@Test
-	void testSimpleJiraClient() throws IOException {
+	void testJiraClientSmall() throws IOException {
 		given()
 			.contentType("application/json")
 			.request().body(contentResourceFile("/alert-sample.small.json5"))
+			.when()
+				.post("/alert")
+			.then()
+				.statusCode(200);
+	}
+
+	/**
+	 * Just similar to {@see testJiraClientSmall}, but in JSON used pair:
+	 *  "jira__field__name__1": "Component/s",
+	 *  "jira__field__value__1": "DQ-issues+alerts, DevOps+infrastructure",
+	 * instead of simple:
+	 * 	"jira__field__component_s": "DQ-issues+alerts, DevOps+infrastructure"
+	 * @throws IOException
+	 */
+	@Test
+	void testJiraClientSmallFieldPairs() throws IOException {
+		given()
+			.contentType("application/json")
+			.request().body(contentResourceFile("/alert-sample.small.field_pairs.json5"))
 			.when()
 				.post("/alert")
 			.then()
