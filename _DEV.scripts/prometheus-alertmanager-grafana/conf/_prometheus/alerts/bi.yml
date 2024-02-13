@@ -31,7 +31,7 @@ groups:
         jira__field__target_start: '2023-11-06'
         qaz1_annotation: qaz1_annotation_value
         value: '{{$value}}'
-        summary: DataTest0 summary
+        summary: DataTest0 summary ${new Date()}
         description: |
           Some description QAZ2
           of DataTest0 alert

@@ -36,7 +36,7 @@ class AlertController {
     @Produces(APPLICATION_JSON)
     @SuppressWarnings(['GrUnnecessaryPublicModifier']) // That is controller, public required
     public Response alert(AlertRequest alertRequest) {
-        log.debug('Got alertRequest: ' + alertRequest)
+        log.debug("Got alertRequest with ${alertRequest.alerts.size()} alerts")
 
         List<BasicIssue> issues = jira.process(alertRequest)
 
