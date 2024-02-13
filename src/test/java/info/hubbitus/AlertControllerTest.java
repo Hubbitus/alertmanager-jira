@@ -11,7 +11,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.core.Is.is;
 
 /**
-* Unfortunately Spock is not supported yet, so use JUnit5.
+* Unfortunately, Spock is not supported yet, so use JUnit5.
 * @link <a href="https://github.com/quarkusio/quarkus/issues/6506">Quarkus issue for that</a>
 * @link <a href="https://github.com/quarkusio/quarkus/issues/30221">Quarkus spock extension proposal</a>
 **/
@@ -45,7 +45,7 @@ class AlertControllerTest {
 	 *  "jira__field__value__1": "DQ-issues+alerts, DevOps+infrastructure",
 	 * instead of simple:
 	 * 	"jira__field__component_s": "DQ-issues+alerts, DevOps+infrastructure"
-	 * @throws IOException
+	 * @throws IOException because resource may be unavailable theoretically. Have no matter for the test
 	 */
 	@Test
 	void testJiraClientSmallFieldPairs() throws IOException {

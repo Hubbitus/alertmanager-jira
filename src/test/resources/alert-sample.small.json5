@@ -25,7 +25,7 @@
         "jira__project_key": "DATA",
         "qaz1_annotation": "qaz1_annotation_value",
         "jira__field__labels": "label_one, labelTwo, label:three, severity:${context.field('severity')}",
-        "summary": "DataTest0 summary",
+        "summary": "DataTest0 summary ${new Date()}",
         "value": "3",
         "jira__comment_in_present_issues": "Looks like error happened again!"
       },

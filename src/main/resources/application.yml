@@ -12,6 +12,12 @@ quarkus:
     category:
       "info.hubbitus":
         level: DEBUG
+      # By https://stackoverflow.com/a/68220910/307525
+      # Produce a lot of info about HTTP traffic for the debug
+#      "org.apache.http":
+#        level: DEBUG
+    console:
+      format: '%d{yyyy-MM-dd HH:mm:ss.SX} %-5p [%l] (%t) %s%e%n'
 
     sentry:
       # Disabled until DSN will be created
