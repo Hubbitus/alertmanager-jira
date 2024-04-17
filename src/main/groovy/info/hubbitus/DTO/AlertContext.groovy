@@ -131,7 +131,7 @@ class AlertContext {
 						field.rawValue = alert.params[valueKey]
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it -> field.name == it.name}
 						if (!field.meta) {
-							throw new IllegalStateException("Name/value pair used to get field: field.name=[${field.name}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
+							throw new IllegalStateException("No metadata field found for this pair! Name/value pair used to get field: {name=[${field.name}], value=[${field.value}]}! Please check specification")
 						}
 						break
 					case field.name.startsWith('value__'): // Pair to the 'name__', skipping
@@ -142,7 +142,7 @@ class AlertContext {
 						field.rawValue = param.value
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it-> customFieldId as Long == it.schema.customId }
 						if (!field.meta) {
-							throw new IllegalStateException("CustomId scheme used to specify field id=[${customFieldId}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
+							throw new IllegalStateException("No metadata field found for this pair! CustomId scheme used to specify field {id=[${customFieldId}], value=[${field.value}]}! Please check specification")
 						}
 						else {
 							field.name = field.meta.getName()
@@ -154,7 +154,7 @@ class AlertContext {
 						field.rawValue = param.value
 						field.meta = (CimFieldInfo)jiraMetaFields.find{ CimFieldInfo it -> nameNormalize(it.name) == nameNormalize(field.name)}
 						if (!field.meta) {
-							throw new IllegalStateException("Default identifier _ substitution scheme used to specify field field.name=[${field.name}], field.value[${field.value}], but no metadata field found for this pair! Please check specification")
+							throw new IllegalStateException("No metadata field found for this pair! Default identifier _ substitution scheme used to specify field {name=[${field.name}], value=[${field.value}]}! Please check specification")
 						}
 						else {
 							field.name = field.meta.getName()
@@ -202,6 +202,7 @@ class AlertContext {
 		}
 	}
 
+	@Memoized
 	static String nameNormalize(String input){
 		return input.toLowerCase().replaceAll(/[^0-9a-zA-Z_]/, '_')
 	}
@@ -222,7 +223,7 @@ class AlertContext {
 
 	/**
 	* Suppose you have in alert definition where you want reference other fields and expressions:
-	* <code>>
+	* <code>
 	* labels:
 	*   severity: warning
 	* annotations:

@@ -115,12 +115,13 @@ class JiraService {
 	/**
 	* Method to create new issue by alert and its mapping
 	* @param alerting
-	* @return
 	**/
 	private static IssueInput createIssueInput(AlertContext alerting){
 		IssueInputBuilder builder = new IssueInputBuilder(alerting.jiraProject, alerting.jiraIssueType)
 			.setSummary(alerting.field('summary'))
 			.setDescription(alerting.field('description'))
+
+		alerting.jiraFields.keySet().removeAll(['Summary', 'Description'])
 
 		alerting.jiraFields
 			.each { String key, JiraFieldMap field ->
