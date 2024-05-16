@@ -10,7 +10,7 @@ import groovy.transform.Memoized
 import groovy.transform.ToString
 import info.hubbitus.JiraService
 
-import static OptionsFields.*
+import static info.hubbitus.DTO.OptionsFields.*
 
 /**
 * Context of alerting.
@@ -19,7 +19,6 @@ import static OptionsFields.*
 @Canonical
 @ToString(includeNames=true, includePackage=false)
 class AlertContext {
-//	public static final String JIRA_KEY_PREFIX = 'jira__'
 	public static final String JIRA_FIELD_KEY_PREFIX = 'jira__field__'
 
 	public Alert alert
@@ -112,8 +111,8 @@ class AlertContext {
 	*
 	* ```yaml
 	* annotations:
-	* # Field "Итоговый результат"
-	* jira__field__customId__10217: 'Some result description (описание результата)'
+	*   # Field "Итоговый результат"
+	*   jira__field__customId__10217: 'Some result description (описание результата)'
 	* ```
 	* @param alert
 	* @return Map of parsed fields with name in key

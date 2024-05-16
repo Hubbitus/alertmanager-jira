@@ -69,8 +69,8 @@ The most important which may be set for rule:
 * `jira__field__*` - all fields that we are best trying to set in target issue. For examples: `jira__field__assignee: plalexeev`, `jira__field__priority: Hight`.
   * Please note, for values accepting arrays, please provide it as comma-separated string (), like: `jira__field__labels: 'label_one, labelTwo, label:three'`
 * `jira__field__name__<n>`/`jira__field__value__<n>` pairs. See the notes below about possible variants of quoting and names providing
-* `jira__alert_identify_label` - template (as described later) of additional label to identify issue update (or resolving). By default, `alert{${context.alert.hashCode()}}` 
-* `jira__jql_to_find_issue_for_update`. By default `labels = "alert{${context.alert.hashCode()}}"`. Provide false or empty value to do not search previous issues
+* `jira__alert_identify_label` - template (as described later) of additional label to identify issue update (or resolving). By default, `alert{${context.alert.hashCode()}}`. One more viable variant may be: `alert[${context.alert.fingerprint}]`.
+* `jira__jql_to_find_issue_for_update`. By default `(labels = "alert[${context.alert.hashCode()}]" AND statusCategory != Done)`. Provide false or empty value to do not search previous issues
 * `jira__comment_in_present_issues` - template to use for comment issue, if that already present. Be careful - all issues by `JQL` from `jira__jql_to_find_issue_for_update` will be commented!
 
 #### Field names normalization

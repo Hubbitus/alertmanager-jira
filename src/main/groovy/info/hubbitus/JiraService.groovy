@@ -9,6 +9,8 @@ import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory
 import com.google.common.base.Function
 import com.google.common.collect.Iterables
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
 import groovy.transform.Memoized
 import info.hubbitus.DTO.Alert
 import info.hubbitus.DTO.AlertContext
@@ -21,8 +23,9 @@ import org.jboss.logging.Logger
 
 import static info.hubbitus.DTO.OptionsFields.JIRA__COMMENT_IN_PRESENT_ISSUES
 
-//@CompileStatic
+@CompileStatic
 @ApplicationScoped
+//@Slf4j(category = "info.hubbitus.JiraService")
 class JiraService {
 	@Inject
 	Logger log
@@ -36,32 +39,21 @@ class JiraService {
 	@ConfigProperty(name="jira.password")
 	String password
 
-	@Lazy
-	public JiraRestClient jiraRestClient = {
-		log.debug("Lazy init jira client; jiraURL=${jiraURL}, username=${username}")
+	@Memoized
+	JiraRestClient getJiraRestClient(){
+		log.debug("Init jira client; jiraURL=${jiraURL}, username=${username}")
 		return new AsynchronousJiraRestClientFactory()
 			.createWithBasicHttpAuthentication(jiraURL, this.username, this.password)
-	}()
+	}
 
 	@Lazy
-	IssueRestClient issueClient = {
-		jiraRestClient.getIssueClient()
-	}()
+	IssueRestClient issueClient = jiraRestClient.getIssueClient()
 
 	@Lazy
-	SearchRestClient searchClient = {
-		jiraRestClient.getSearchClient()
-	}()
+	SearchRestClient searchClient = jiraRestClient.getSearchClient()
 
 	@Lazy
-	MetadataRestClient metadataClient = {
-		jiraRestClient.getMetadataClient()
-	}()
-
-	@Lazy
-	ProjectRestClient projectClient = {
-		jiraRestClient.getProjectClient()
-	}()
+	ProjectRestClient projectClient = jiraRestClient.getProjectClient()
 
 	@Memoized
 	Project getProjectByCode(String code){
@@ -116,9 +108,10 @@ class JiraService {
 	* Method to create new issue by alert and its mapping
 	* @param alerting
 	**/
+	@CompileDynamic
 	private static IssueInput createIssueInput(AlertContext alerting){
 		IssueInputBuilder builder = new IssueInputBuilder(alerting.jiraProject, alerting.jiraIssueType)
-			.setSummary(alerting.field('summary'))
+			.setSummary((alerting.jiraFields.Summary.value ?: alerting.field('summary')) as String)
 			.setDescription(alerting.field('description'))
 
 		alerting.jiraFields.keySet().removeAll(['Summary', 'Description'])
