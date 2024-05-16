@@ -2,6 +2,7 @@ package info.hubbitus
 
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import groovy.json.JsonBuilder
+import groovy.transform.CompileStatic
 import info.hubbitus.DTO.AlertRequest
 import jakarta.inject.Inject
 import jakarta.ws.rs.*
@@ -13,6 +14,7 @@ import static jakarta.ws.rs.core.MediaType.*
 @Path('/')
 @Consumes(WILDCARD)
 @Produces(APPLICATION_JSON)
+@CompileStatic
 @SuppressWarnings('unused')
 class AlertController {
     @Inject
@@ -36,7 +38,7 @@ class AlertController {
     @Produces(APPLICATION_JSON)
     @SuppressWarnings(['GrUnnecessaryPublicModifier']) // That is controller, public required
     public Response alert(AlertRequest alertRequest) {
-        log.debug("Got alertRequest with ${alertRequest.alerts.size()} alerts")
+        log.debug("Got alertRequest with ${alertRequest.alerts.size()} alert(s)")
 
         List<BasicIssue> issues = jira.process(alertRequest)
 

@@ -33,7 +33,7 @@ class LoggingFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         byte[] requestSource = requestContext.getEntityStream().readAllBytes();
-        log.debug("Raw JSON request:\n" + new String(requestSource, UTF_8));
+        log.debug("Raw JSON request on URL [${requestContext.getUriInfo().getAbsolutePath()}]:\n" + new String(requestSource, UTF_8));
         // Set back input stream for the controllers
         requestContext.setEntityStream(new ByteArrayInputStream(requestSource));
     }
