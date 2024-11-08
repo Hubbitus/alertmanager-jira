@@ -13,7 +13,7 @@ Sample configuration how to run in `podman-compose` full stack prometheus+alertm
 
 There we will start just from alert rule configuration example. Let it be defined like:
 
-[alertmanager.yml](_DEV.scripts/prometheus-alertmanager-grafana/conf/_alertmanager/alertmanager.yml) pert:
+[alertmanager.yml](_DEV.scripts/prometheus-alertmanager-grafana/conf/_alertmanager/alertmanager.yml) part:
 ```yaml
 receivers:
   - name: 'jira-data'
