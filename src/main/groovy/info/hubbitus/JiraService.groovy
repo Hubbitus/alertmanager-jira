@@ -110,7 +110,7 @@ class JiraService {
 
 	def commentIssue(Issue issue, AlertContext alerting){
 		String comment = alerting.field(JIRA__COMMENT_IN_PRESENT_ISSUES.key)
-		log.info("Add comment on the issue [${jiraURL}browse/${issue.key} «${issue.summary}»]: ${comment}")
+		log.info("Add comment to the issue [${jiraURL}browse/${issue.key} «${issue.summary}»]: ${comment}")
 		issueClient.addComment(
 			issue.getCommentsUri(),
 			Comment.valueOf(comment)
