@@ -1,6 +1,7 @@
 package info.hubbitus;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.filter.log.LogDetail;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -8,6 +9,8 @@ import java.util.Objects;
 
 import static io.restassured.RestAssured.given;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
 /**
@@ -36,7 +39,11 @@ class AlertControllerTest {
 			.when()
 				.post("/alert")
 			.then()
-				.statusCode(200);
+				.log().ifValidationFails(LogDetail.BODY)
+				.statusCode(200)
+				.body("content.result", is("ok"))
+				.body("content.affected_issues", not(emptyArray()))
+		;
 	}
 
 	/**
@@ -55,7 +62,30 @@ class AlertControllerTest {
 			.when()
 				.post("/alert")
 			.then()
-				.statusCode(200);
+				.log().ifValidationFails(LogDetail.BODY)
+				.statusCode(200)
+				.body("content.result", is("ok"))
+				.body("content.affected_issues", not(emptyArray()))
+		;
+	}
+
+	/**
+    * Alertmanager sometimes sent requests where $ is present.
+    * Issue <a href="https://jira.gid.team/browse/DATA-6503">DATA-6503</a>
+    **/
+	@Test
+	void testJiraCreateAlertWith$InInput() throws IOException {
+		given()
+			.contentType("application/json")
+			.request().body(contentResourceFile("/alert-sample.with$.json5"))
+			.when()
+				.post("/alert")
+			.then()
+				.log().ifValidationFails(LogDetail.BODY)
+				.statusCode(200)
+				.body("content.result", is("ok"))
+				.body("content.affected_issues", not(emptyArray()))
+		;
 	}
 
 	/* *********************

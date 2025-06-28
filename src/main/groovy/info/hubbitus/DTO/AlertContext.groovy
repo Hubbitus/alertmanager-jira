@@ -8,6 +8,7 @@ import groovy.text.SimpleTemplateEngine
 import groovy.transform.Canonical
 import groovy.transform.Memoized
 import groovy.transform.ToString
+import info.hubbitus.utils.FakeBinding
 import info.hubbitus.JiraService
 
 import static info.hubbitus.DTO.OptionsFields.*
@@ -234,6 +235,12 @@ class AlertContext {
 	String template(String text){
 		if (!text)
 			return text
-		return new SimpleTemplateEngine().createTemplate(text).make([context: this]).toString()
+
+		return new SimpleTemplateEngine().createTemplate(text)
+			.make(
+				[context: this].withDefault({
+                    key -> new FakeBinding(key)
+                } as Closure<AlertContext>)
+            ).toString()
 	}
 }
