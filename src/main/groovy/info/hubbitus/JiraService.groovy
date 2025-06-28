@@ -1,12 +1,15 @@
 package info.hubbitus
 
+import com.atlassian.httpclient.api.factory.HttpClientOptions
 import com.atlassian.jira.rest.client.api.*
 import com.atlassian.jira.rest.client.api.domain.*
 import com.atlassian.jira.rest.client.api.domain.input.ComplexIssueInputFieldValue
 import com.atlassian.jira.rest.client.api.domain.input.FieldInput
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
-import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory
+import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler
+import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClient
+import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
 import com.google.common.base.Function
 import com.google.common.collect.Iterables
 import groovy.transform.CompileDynamic
@@ -16,12 +19,14 @@ import info.hubbitus.DTO.Alert
 import info.hubbitus.DTO.AlertContext
 import info.hubbitus.DTO.AlertRequest
 import info.hubbitus.DTO.JiraFieldMap
+import info.hubbitus.jira.AsynchronousHttpClientConfigurableFactory
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.jboss.logging.Logger
 
 import static info.hubbitus.DTO.OptionsFields.JIRA__COMMENT_IN_PRESENT_ISSUES
+import static java.util.concurrent.TimeUnit.SECONDS
 
 @CompileStatic
 @ApplicationScoped
@@ -39,11 +44,25 @@ class JiraService {
 	@ConfigProperty(name="jira.password")
 	String password
 
+	@ConfigProperty(name="jira.timeout.socket")
+	int timeoutSocket
+
+	@ConfigProperty(name="jira.timeout.request")
+	int timeoutRequest
+
 	@Memoized
 	JiraRestClient getJiraRestClient(){
 		log.debug("Init jira client; jiraURL=${jiraURL}, username=${username}")
-		return new AsynchronousJiraRestClientFactory()
-			.createWithBasicHttpAuthentication(jiraURL, this.username, this.password)
+		// Increase timeout. On Lab instance we got frequently: Caused by: java.net.SocketTimeoutException: 20,000 milliseconds timeout on connection http-outgoing-2 [ACTIVE]
+		// Without it initial implementation was just: def ret =  new AsynchronousJiraRestClientFactory().createWithBasicHttpAuthentication(jiraURL, this.username, this.password)
+
+		HttpClientOptions httpOptions = new HttpClientOptions().tap {
+			it.setSocketTimeout(timeoutSocket, SECONDS)
+			it.setRequestTimeout(timeoutRequest, SECONDS)
+		}
+		final AuthenticationHandler authHandler = new BasicHttpAuthenticationHandler(username, password)
+		final DisposableHttpClient httpClient = AsynchronousHttpClientConfigurableFactory.createClient(jiraURL, authHandler, httpOptions)
+		return new AsynchronousJiraRestClient(jiraURL, httpClient)
 	}
 
 	@Lazy
@@ -111,7 +130,7 @@ class JiraService {
 	@CompileDynamic
 	private static IssueInput createIssueInput(AlertContext alerting){
 		IssueInputBuilder builder = new IssueInputBuilder(alerting.jiraProject, alerting.jiraIssueType)
-			.setSummary((alerting.jiraFields.Summary.value ?: alerting.field('summary')) as String)
+			.setSummary((alerting.jiraFields.Summary?.value ?: alerting.field('summary')) as String)
 			.setDescription(alerting.field('description'))
 
 		alerting.jiraFields.keySet().removeAll(['Summary', 'Description'])

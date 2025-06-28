@@ -8,8 +8,8 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
-        name 'atlassian-public'
-        url 'https://m2proxy.atlassian.com/repository/public'
+        name = 'atlassian-public'
+        url = 'https://m2proxy.atlassian.com/repository/public'
 //        url 'https://packages.atlassian.com/maven/repository/public'
     }
     dependencies {
@@ -73,12 +73,12 @@ repositories {
 }
 
 
-group 'info.hubbitus.alertmanager-jira'
-version '1.0.0-SNAPSHOT'
+group = 'info.hubbitus.alertmanager-jira'
+version = '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 test {
