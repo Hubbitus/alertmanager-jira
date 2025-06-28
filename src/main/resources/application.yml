@@ -42,3 +42,6 @@ jira:
   username: jira-data-svc
   # Must be provided securely, e.g. by env variable JIRA_PASSWORD
 #  password:
+  timeout:
+    socket: 60000
+    request: 60000

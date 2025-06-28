@@ -43,3 +43,5 @@ nb-configuration.xml
 _DEV.scripts/load_data.json
 *.BAK
 *.DEL
+
+/lib
