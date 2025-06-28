@@ -4,7 +4,7 @@
 
 # Dockerfile primarly to have single well-known entrypoint
 # From https://www.graalvm.org/latest/docs/getting-started/container-images/
-FROM ghcr.io/graalvm/native-image-community:17 as builder
+FROM ghcr.io/graalvm/native-image-community:21 as builder
 #FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17 as builder
 
 WORKDIR /app
