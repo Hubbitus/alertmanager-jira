@@ -1,4 +1,4 @@
-# Dockerfile primarly to have single well-known entrypoint
+# Dockerfile primary to have single well-known entrypoint
 # From https://www.graalvm.org/latest/docs/getting-started/container-images/
 #FROM ghcr.io/graalvm/native-image-community:17 as builder
 #FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17 as builder
@@ -12,7 +12,7 @@ RUN chmod "g+rwX" /app
 
 RUN microdnf install findutils
 
-# Tests disabled because they integrational now and require external JIRA instanse to function
+# Tests disabled because they are integration now and require external JIRA instance to function
 RUN ./gradlew build -Dquarkus.package.type=native -x test
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
