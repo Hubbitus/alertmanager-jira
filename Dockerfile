@@ -15,12 +15,13 @@ RUN chmod "g+rwX" /app
 
 RUN microdnf install findutils
 
-# Tests disabled because they integrational now and are require external JIRA instanse to function
+# Tests disabled because they are integration now and are require external JIRA instance to function
 RUN ./gradlew build -x test
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
-FROM registry.access.redhat.com/ubi8/openjdk-17:1.15
+#FROM registry.access.redhat.com/ubi8/openjdk-17:1.15
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.22-1.1749462970
 
 ENV LANGUAGE='en_US:en'
 
