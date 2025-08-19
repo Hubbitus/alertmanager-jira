@@ -8,7 +8,6 @@ import groovy.text.SimpleTemplateEngine
 import groovy.transform.Canonical
 import groovy.transform.Memoized
 import groovy.transform.ToString
-import info.hubbitus.utils.FakeBinding
 import info.hubbitus.JiraService
 
 import static info.hubbitus.DTO.OptionsFields.*
@@ -42,7 +41,7 @@ class AlertContext {
 
 	@Lazy
 	public Project jiraProject = {
-		jiraService.getProjectByCode(field(JIRA__PROJECT_KEY.key))
+		jiraService.getProjectByCode(field(JIRA__PROJECT_KEY))
 	}()
 
 	@Lazy
@@ -208,7 +207,7 @@ class AlertContext {
 	}
 
 	/**
-	* Just fast access to do not check always in labels and annotations.
+	* Access to provided values for the desired field (looks values in labels and annotations).
 	* Also handling templating by <a href="https://docs.groovy-lang.org/docs/next/html/documentation/template-engines.html#_simpletemplateengine">SimpleTemplateEngine</a>
 	* @link template()
 	**/
@@ -217,8 +216,13 @@ class AlertContext {
 		return template(((alert.labels + alert.annotations)[name] ?: defaultValue))
 	}
 
+	@Memoized
+	String field(OptionsFields option){
+		return field(option.key, option.defaultValue)
+	}
+
 	private String issueIdentificationLabel(){
-		field(JIRA__ALERT_IDENTIFY_LABEL.key, JIRA__ALERT_IDENTIFY_LABEL.defaultValue)
+		field(JIRA__ALERT_IDENTIFY_LABEL)
 	}
 
 	/**
@@ -236,11 +240,10 @@ class AlertContext {
 		if (!text)
 			return text
 
-		return new SimpleTemplateEngine().createTemplate(text)
-			.make(
-				[context: this].withDefault({
-                    key -> new FakeBinding(key)
-                } as Closure<AlertContext>)
-            ).toString()
+		return new SimpleTemplateEngine().createTemplate(
+			// All $ signs which are not referencing context like '$context' or '${context.some}' must mbe escaped to \$ form to prevent error of template handling
+			// String for check: 'Some template ${context.alert.severity} some$200 other$className $context'
+			text.replaceAll(/\$(?!\{|context\.)/, '\\\\\\$'))
+			.make([context: this]).toString()
 	}
 }

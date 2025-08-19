@@ -22,7 +22,7 @@ import static org.hamcrest.core.Is.is;
 class AlertControllerTest {
 
 	@Test
-	public void testPingEndpoint() {
+	public void test01_PingEndpoint() {
 		given()
 			.when()
 				.get("/ping")
@@ -32,7 +32,7 @@ class AlertControllerTest {
 	}
 
 	@Test
-	void testJiraCreateSimpleAlert() throws IOException {
+	void test02_JiraCreateSimpleAlert() throws IOException {
 		given()
 			.contentType("application/json")
 			.request().body(contentResourceFile("/alert-sample.small.json5"))
@@ -55,7 +55,7 @@ class AlertControllerTest {
 	* @throws IOException because resource may be unavailable theoretically. Have no matter for the test
 	**/
 	@Test
-	void testJiraCreateSimpleAlert_FieldPairs() throws IOException {
+	void test03_JiraCreateSimpleAlert_FieldPairs() throws IOException {
 		given()
 			.contentType("application/json")
 			.request().body(contentResourceFile("/alert-sample.small.field_pairs.json5"))
@@ -74,10 +74,29 @@ class AlertControllerTest {
     * Issue <a href="https://jira.gid.team/browse/DATA-6503">DATA-6503</a>
     **/
 	@Test
-	void testJiraCreateAlertWith$InInput() throws IOException {
+	void test04_JiraCreateAlertWith$InInput() throws IOException {
 		given()
 			.contentType("application/json")
-			.request().body(contentResourceFile("/alert-sample.with$.json5"))
+			.request().body(contentResourceFile("/alert-sample.with$.DATA-6503.json5"))
+			.when()
+				.post("/alert")
+			.then()
+				.log().ifValidationFails(LogDetail.BODY)
+				.statusCode(200)
+				.body("content.result", is("ok"))
+				.body("content.affected_issues", not(emptyArray()))
+		;
+	}
+
+	/**
+	* Alertmanager sometimes sent requests is not processable by us
+	* Issue <a href="https://jira.gid.team/browse/DATA-6502">DATA-6502</a>
+	**/
+	@Test
+	void test05_JiraCreateAlert_DATA6502() throws IOException {
+		given()
+			.contentType("application/json")
+			.request().body(contentResourceFile("/alert-sample.DATA-6502.json5"))
 			.when()
 				.post("/alert")
 			.then()

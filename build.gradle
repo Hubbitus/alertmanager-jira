@@ -39,7 +39,7 @@ repositories {
 //        implementation 'io.quarkiverse.spock:quarkus-spock:1.0-SNAPSHOT'
         implementation 'org.apache.logging.log4j:log4j-core:2.21.1'
 
-        implementation 'io.quarkus:quarkus-resteasy-reactive-jackson:2.16.4.Final'
+        implementation 'io.quarkus:quarkus-resteasy-reactive-jackson:3.15.6.1'
 
         // JIRA
         implementation 'com.atlassian.jira:jira-rest-java-client-app:5.2.7'
@@ -56,7 +56,7 @@ repositories {
 //        implementation 'org.glassfish.jersey.core:jersey-common:2.0.0'
 
         implementation 'io.quarkiverse.loggingsentry:quarkus-logging-sentry:2.0.4'
-        implementation "io.quarkus:quarkus-micrometer-registry-prometheus:${quarkusPluginVersion}"
+        implementation "io.quarkus:quarkus-micrometer-registry-prometheus:${quarkusPlatformVersion}"
 
         // Native built error workaround:
         // Error: Class initialization of org.glassfish.jersey.message.internal.DataSourceProvider failed. This error is reported at image build time because class org.glassfish.jersey.message.internal.DataSourceProvider is registered for linking at image build time by command line and command line. Use the option
