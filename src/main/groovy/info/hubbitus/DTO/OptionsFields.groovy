@@ -1,8 +1,9 @@
 package info.hubbitus.DTO
 
 /**
-* Also parsed dynamic valies of fields:
-* `jira__field__*` - all fields which we are best trying to set in target issue. For examples: `jira__field__assignee: plalexeev`, `jira__field__priority: Hight`.
+* There as enums listed most common, global options.
+* Also parsed dynamic values of fields:
+* `jira__field__*` - all fields which we are best trying to set in target issue. For examples: `jira__field__assignee: plalexeev`, `jira__field__priority: High`.
 * Please note, for values takes array, please provide it as comma-separated string (), like: `jira__field__labels: 'label_one, labelTwo, label:three'`
 * `jira__field__name__<n>`/`jira__field__value__<n>` pairs. See notes below about possible variants of quoting and names providing
 **/

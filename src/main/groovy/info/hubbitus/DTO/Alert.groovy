@@ -25,8 +25,8 @@ class Alert {
 	ZonedDateTime startsAt
 
 	/**
-	 * Just fast access to do not check always in labels and annotations.
-	 */
+	* Just fast access to do not check always in labels and annotations.
+	**/
 	@Lazy
 	Map params = {labels + annotations}()
 }
