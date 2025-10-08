@@ -2,7 +2,7 @@
 # Most probably because old API 'javax.ws.rs:javax.ws.rs-api:2.1.1' used by atlassian JIRA REST Client
 # So, we use JVM mode instead
 
-# Dockerfile primarly to have single well-known entrypoint
+# Dockerfile primarily to have single well-known entrypoint
 # From https://www.graalvm.org/latest/docs/getting-started/container-images/
 FROM ghcr.io/graalvm/native-image-community:21 as builder
 #FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17 as builder
@@ -20,7 +20,6 @@ RUN ./gradlew build -x test
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
-#FROM registry.access.redhat.com/ubi8/openjdk-17:1.15
 FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.22-1.1749462970
 
 ENV LANGUAGE='en_US:en'

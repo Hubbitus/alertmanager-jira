@@ -7,7 +7,17 @@ Docker images are available at https://hub.docker.com/r/hubbitus/alertmanager-ji
 
 [![docker images](https://img.shields.io/badge/docker-images-green)](https://hub.docker.com/r/hubbitus/alertmanager-jira)
 
-## Configuration
+### Running in a container
+
+```shell
+podman run -it --rm --name alertmanager-jira-manual \
+    --env JIRA_URL=https://jira.example.com/ --env JIRA_USERNAME=service --env JIRA_PASSWORD=qwerty \
+    -p 8080:8080 \
+        localhost/local/alertmanager-jira:latest
+```
+
+
+## Alerts configuration
 
 Sample configuration how to run in `podman-compose` full stack prometheus+alertmanager+grafana see in directory [_DEV.scripts/prometheus-alertmanager-grafana]()
 
@@ -198,11 +208,3 @@ See [documentation](https://quarkus.io/guides/building-native-image#creating-a-c
 ### Related Guides
 
 - SmallRye Reactive Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka-reactive-getting-started)): Connect to Kafka with Reactive Messaging
-
-### Running in a container
-
-```shell
-podman run -it --rm --name alertmanager-jira-manual \
-    -p 8080:8080 \
-        localhost/local/alertmanager-jira:latest
-```
